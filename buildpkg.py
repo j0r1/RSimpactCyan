@@ -36,7 +36,11 @@ def main():
     tmpLibDir = os.path.join(instDir, "tmpLibDir")
     os.mkdir(tmpLibDir)
     
-    Rexe = "R"
+    if platform.system() == "Windows": # Windows
+        Rexe = "c:\\Program Files\\R\\R-3.1.2\\bin\\R.exe"
+    else:
+        Rexe = "R"
+
     logFileName = "rlogfile"
     with open(logFileName, "wt") as logfile:
         subprocess.call([ Rexe, "CMD", "INSTALL", curDir, "--build", "-l", tmpLibDir ], stdout=logfile, stderr=logfile)
@@ -47,7 +51,9 @@ def main():
     print("Package name is %s" % pkgFile)
 
     if platform.system() == "Windows": # Windows
-        print("TODO")
+        os.makedirs("bin/windows/contrib/3.1/")
+        shutil.move(pkgFile, "bin/windows/contrib/3.1/")
+        shutil.copy(os.path.join(curDir,"DESCRIPTION"), "bin/windows/contrib/3.1/PACKAGES")
     elif platform.system() == "Darwin": # OS X
         os.makedirs("bin/macosx/mavericks/contrib/3.1/")
         os.makedirs("bin/macosx/contrib/3.0/")
