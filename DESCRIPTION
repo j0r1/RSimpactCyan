@@ -1,0 +1,11 @@
+Package: RSimpactCyan
+Type: Package
+Title: R bindings for Simpact Cyan
+Version: 1.0-0
+Date: 2014-11-13
+Author: Jori Liesenborgs @ Hasselt University
+Maintainer: Jori Liesenborgs <jori.liesenborgs@uhasselt.be>
+Description: This package contains functions to work with the Simpact Cyan
+	executables from within an R session.
+Depends: rPython (>= 0.0-5)
+License: GPL-2
