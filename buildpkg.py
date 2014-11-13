@@ -6,20 +6,23 @@ import sys
 import subprocess
 import platform
 import shutil
+import string
 
 def getPackageFileName(logFileName):
     with open(logFileName, "rt") as f:
         l = f.readline()
         while l:
             l = l.strip()
+            print(l)
             if l.startswith("packaged installation of"):
-                s = "' as '"
+                s = " as "
                 idx = l.find(s)
                 if idx >= 0:
-                    startPos = idx+len(s)
-                    endPos = l.find("'", startPos)
-                    if endPos >= startPos:
-                        return l[startPos:endPos]
+                    startPos = l.find("R", idx)
+                    endPos = len(l)-1
+                    while l[endPos] not in string.letters:
+                        endPos -= 1
+                    return l[startPos:endPos+1]
 
             l = f.readline()
 
