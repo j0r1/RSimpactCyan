@@ -1,3 +1,9 @@
+simpact.set.simulation <- function(simulationName)
+{
+	r = simpact.python.call("simpactPythonInstance.setSimulationPrefix", simulationName)
+	invisible(r)
+}
+
 simpact.run.direct <- function(configFile, outputfile = NULL, release = TRUE, slowalg = FALSE, parallel = FALSE, seed = -1, destdir=NULL)
 {
 	r = simpact.python.call("simpactPythonInstance.runDirect", configFile, parallel, !slowalg, release, outputfile, seed, destdir)
@@ -30,5 +36,4 @@ simpact.showconfig <- function(configParams)
 {
 	r = simpact.getconfig(configParams, show = TRUE)
 }
-
 

@@ -12,6 +12,7 @@ import platform
 
 class SimpactPython(object):
     def __init__(self):
+        self.execPrefix = "simpact-cyan"
         self.execDir = self.findSimpactDirectory()
 
     def setSimpactDirectory(self, dirName):
@@ -21,9 +22,9 @@ class SimpactPython(object):
         with open(os.devnull, "w") as DEVNULL:
             paths = [ ]
             if platform.system() == "Windows":
-                    paths += [ "C:\\Program Files (x86)\\SimpactCyan", "C:\\Program Files\\SimpactCyan" ]
+                paths += [ "C:\\Program Files (x86)\\SimpactCyan", "C:\\Program Files\\SimpactCyan" ]
 
-            exe = "simpact-cyan-opt"
+            exe = "simpact-cyan-opt" # This should always exist
 
             # First see if we can run the executable without a full path
             try:
@@ -44,9 +45,23 @@ class SimpactPython(object):
         print "Warning: can't seem to find a way to run the simpact executables"
         return None
 
-    def getExecPath(self, opt = True, release = True):
+    def setSimulationPrefix(self, prefix):
 
-        fullPath = "simpact-cyan-"
+        if not prefix:
+            raise Exception("No valid simulation prefix specified")
+
+        with open(os.devnull, "w") as DEVNULL:
+            try:
+                p = self.getExecPath(testPrefix = prefix)
+                subprocess.call( [ p ], stderr=DEVNULL, stdout=DEVNULL)
+                self.execPrefix = prefix
+            except Exception as e:
+                raise Exception("Unable to use specified prefix '%s' (can't run '%s')" % (prefix, p))
+
+    def getExecPath(self, opt = True, release = True, testPrefix = None):
+
+        fullPath = testPrefix if testPrefix else self.execPrefix
+        fullPath += "-"
         fullPath += "opt" if opt else "basic"
 
         if not release:
