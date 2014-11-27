@@ -111,6 +111,10 @@ class SimpactPython(object):
             proc.wait() # Wait for the process to finish
             print "Done."
             print
+
+            if proc.returncode != 0:
+                raise Exception("Program exited with an error code (%d)" % proc.returncode)
+            
         finally:
             if closeOutput:
                 f.close()
