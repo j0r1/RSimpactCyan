@@ -4,6 +4,12 @@ simpact.set.simulation <- function(simulationName)
 	invisible(r)
 }
 
+simpact.set.datadir <- function(dirName)
+{
+	r = simpact.python.call("simpactPythonInstance.setSimpactDataDirectory", dirName)
+	invisible(r)
+}
+
 simpact.run.direct <- function(configFile, outputfile = NULL, release = TRUE, slowalg = FALSE, parallel = FALSE, seed = -1, destdir=NULL)
 {
 	r = simpact.python.call("simpactPythonInstance.runDirect", configFile, parallel, !slowalg, release, outputfile, seed, destdir)

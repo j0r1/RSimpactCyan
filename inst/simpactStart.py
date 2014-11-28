@@ -13,10 +13,31 @@ import platform
 class SimpactPython(object):
     def __init__(self):
         self.execPrefix = "simpact-cyan"
+        self.dataDirectory = self.findSimpactDataDirectory()
         self.execDir = self.findSimpactDirectory()
 
     def setSimpactDirectory(self, dirName):
         self.execDir = dirName
+
+    def setSimpactDataDirectory(self, dirName):
+        self.dataDirectory = dirName
+
+    def findSimpactDataDirectory(self):
+        paths = [ ]
+        if platform.system() == "Windows":
+            paths += [ "C:\\Program Files (x86)\\SimpactCyan\\data", "C:\\Program Files\\SimpactCyan\\data" ]
+        else:
+            paths += [ "/usr/share/simpact-cyan", "/usr/local/share/simpact-cyan" ]
+            paths += [ "/Applications/SimpactCyan.app/Contents/data" ]
+
+        for p in paths:
+            f = os.path.join(p, "sa_2003.csv")
+            if os.path.exists(f):
+                print "Setting data directory to", p
+                return p
+
+        print "Warning: can't seem to find a way to run the simpact data directory"
+        return None
 
     def findSimpactDirectory(self):
         with open(os.devnull, "w") as DEVNULL:
@@ -261,6 +282,14 @@ class SimpactPython(object):
         # Here, the actual configuration file lines are created
         finalConfig, lines, notNeeded = self.createConfigLines(config, True)
 
+        # Check if we need to replace the data directory
+        for i in range(len(lines)):
+            l = lines[i]
+            if "%DATADIR%" in l:
+                if not self.dataDirectory:
+                    raise Exception("Special identifier %DATADIR% is used in the following line, but no data directory has been set: '%s'" % l)
+                lines[i] = self.replaceDataDir(l)
+
         # Check some paths
         configFile = os.path.abspath(os.path.join(destDir, "simpact-%s-config.txt" % idStr))
         if os.path.exists(configFile):
@@ -312,13 +341,17 @@ class SimpactPython(object):
             self.runDirect(configFile, parallel, opt, release, outputFile, seed, destDir)
 
         results = { }
-        results["logevents"] = eventLog
-        results["logrelations"] = relationLog
-        results["logpersons"] = personLog
-        results["configfile"] = configFile
-        results["outputfile"] = outputFile
-        results["agedistfile"] = distFile
+        results["logevents"] = os.path.join(destDir, eventLog)
+        results["logrelations"] = os.path.join(destDir, relationLog)
+        results["logpersons"] = os.path.join(destDir, personLog)
+        results["configfile"] = os.path.join(destDir, configFile)
+        results["outputfile"] = os.path.join(destDir, outputFile)
+        results["agedistfile"] = os.path.join(destDir, distFile)
         results["id"] = "simpact-%s-" % idStr
 
         return results
+
+    def replaceDataDir(self, l):
+        # TODO: adjust this so it works equally well in windows and linux
+        return l.replace("%DATADIR%", str(self.dataDirectory))
 
