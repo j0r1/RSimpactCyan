@@ -353,5 +353,21 @@ class SimpactPython(object):
 
     def replaceDataDir(self, l):
         # TODO: adjust this so it works equally well in windows and linux
-        return l.replace("%DATADIR%", str(self.dataDirectory))
+        #return l.replace("%DATADIR%", str(self.dataDirectory))
 
+        dataDirId = "%DATADIR%"
+
+        maxRepl = 64 # Make sure we don't get stuck
+        for r in range(maxRepl):
+            idx = l.find(dataDirId)
+            if idx < 0: # Nothing could be found
+                return l
+
+            offset = 0
+            p = idx+len(dataDirId)
+            if p < len(l) and l[p] in [ '\\', '/' ]:
+                offset = 1
+
+            l = l[:idx] + os.path.join(self.dataDirectory, l[idx+len(dataDirId)+offset:])
+
+        return l
