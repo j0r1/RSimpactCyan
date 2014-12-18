@@ -211,9 +211,11 @@ class SimpactPython(object):
         eventLog = "simpact-%s-eventlog.csv" % idStr
         personLog = "simpact-%s-personlog.csv" % idStr
         relationLog = "simpact-%s-relationlog.csv" % idStr
+        treatmentLog = "simpact-%s-treatmentlog.csv" % idStr
         config["logsystem.filename.events"] = eventLog
         config["logsystem.filename.persons"] = personLog
         config["logsystem.filename.relations"] = relationLog
+        config["logsystem.filename.treatments"] = treatmentLog
 
         #distFile = os.path.abspath(os.path.join(destDir, "simpact-%s-agedist.csv" % idStr))
         distFile = "simpact-%s-agedist.csv" % idStr
@@ -344,6 +346,7 @@ class SimpactPython(object):
         results["logevents"] = os.path.join(destDir, eventLog)
         results["logrelations"] = os.path.join(destDir, relationLog)
         results["logpersons"] = os.path.join(destDir, personLog)
+        results["logtreatments"] = os.path.join(destDir, treatmentLog) 
         results["configfile"] = os.path.join(destDir, configFile)
         results["outputfile"] = os.path.join(destDir, outputFile)
         results["agedistfile"] = os.path.join(destDir, distFile)
