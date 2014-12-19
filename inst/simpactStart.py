@@ -25,10 +25,10 @@ class SimpactPython(object):
     def findSimpactDataDirectory(self):
         paths = [ ]
         if platform.system() == "Windows":
-            paths += [ "C:\\Program Files (x86)\\SimpactCyan\\data", "C:\\Program Files\\SimpactCyan\\data" ]
+            paths += [ "C:\\Program Files (x86)\\SimpactCyan\\data\\", "C:\\Program Files\\SimpactCyan\\data\\" ]
         else:
-            paths += [ "/usr/share/simpact-cyan", "/usr/local/share/simpact-cyan" ]
-            paths += [ "/Applications/SimpactCyan.app/Contents/data" ]
+            paths += [ "/usr/share/simpact-cyan/", "/usr/local/share/simpact-cyan/" ]
+            paths += [ "/Applications/SimpactCyan.app/Contents/data/" ]
 
         for p in paths:
             f = os.path.join(p, "sa_2003.csv")
@@ -125,6 +125,9 @@ class SimpactPython(object):
             newEnv = copy.deepcopy(os.environ)
             if seed >= 0:
                 newEnv["MNRM_DEBUG_SEED"] = str(seed)
+
+            if self.dataDirectory is not None:
+                newEnv["SIMPACT_DATA_DIR"] = str(self.dataDirectory)
             
             print "Results will be stored in directory '%s'" % os.getcwd()
             print "Running simpact executable..."
@@ -186,7 +189,7 @@ class SimpactPython(object):
 
         pidStr = str(os.getpid())
 
-        return timeStr + "_" + pidStr + "_" + rndStr
+        return self.execPrefix + "-" + timeStr + "_" + pidStr + "_" + rndStr
 
     def run(self, config, destDir, agedist, parallel = False, opt = True, release = True, seed = -1, interventionConfig = None, dryRun = False):
 
@@ -208,17 +211,17 @@ class SimpactPython(object):
 
         # The config files will be overridden to make sure we write in the specified
         # destination directory
-        eventLog = "simpact-%s-eventlog.csv" % idStr
-        personLog = "simpact-%s-personlog.csv" % idStr
-        relationLog = "simpact-%s-relationlog.csv" % idStr
-        treatmentLog = "simpact-%s-treatmentlog.csv" % idStr
+        eventLog = "%s-eventlog.csv" % idStr
+        personLog = "%s-personlog.csv" % idStr
+        relationLog = "%s-relationlog.csv" % idStr
+        treatmentLog = "%s-treatmentlog.csv" % idStr
         config["logsystem.filename.events"] = eventLog
         config["logsystem.filename.persons"] = personLog
         config["logsystem.filename.relations"] = relationLog
         config["logsystem.filename.treatments"] = treatmentLog
 
         #distFile = os.path.abspath(os.path.join(destDir, "simpact-%s-agedist.csv" % idStr))
-        distFile = "simpact-%s-agedist.csv" % idStr
+        distFile = "%s-agedist.csv" % idStr
         config["population.agedistfile"] = distFile
 
         # Intervention event stuff
@@ -268,7 +271,7 @@ class SimpactPython(object):
             config["intervention.times"] = ivTimeString
             config["intervention.fileids"] = ivIDString
 
-            intBaseFile = "simpact-%s-interventionconfig_%%.txt" % idStr
+            intBaseFile = "%s-interventionconfig_%%.txt" % idStr
             config["intervention.baseconfigname"] = intBaseFile
 
         if os.path.exists(destDir):
@@ -284,20 +287,12 @@ class SimpactPython(object):
         # Here, the actual configuration file lines are created
         finalConfig, lines, notNeeded = self.createConfigLines(config, True)
 
-        # Check if we need to replace the data directory
-        for i in range(len(lines)):
-            l = lines[i]
-            if "%DATADIR%" in l:
-                if not self.dataDirectory:
-                    raise Exception("Special identifier %DATADIR% is used in the following line, but no data directory has been set: '%s'" % l)
-                lines[i] = self.replaceDataDir(l)
-
         # Check some paths
-        configFile = os.path.abspath(os.path.join(destDir, "simpact-%s-config.txt" % idStr))
+        configFile = os.path.abspath(os.path.join(destDir, "%s-config.txt" % idStr))
         if os.path.exists(configFile):
             raise Exception("Want to write to configuration file '%s', but this already exists" % configFile)
 
-        outputFile = os.path.abspath(os.path.join(destDir, "simpact-%s-output.txt" % idStr))
+        outputFile = os.path.abspath(os.path.join(destDir, "%s-output.txt" % idStr))
         if os.path.exists(outputFile):
             raise Exception("Want to write to output file '%s', but this already exists" % outputFile)
 
@@ -350,27 +345,7 @@ class SimpactPython(object):
         results["configfile"] = os.path.join(destDir, configFile)
         results["outputfile"] = os.path.join(destDir, outputFile)
         results["agedistfile"] = os.path.join(destDir, distFile)
-        results["id"] = "simpact-%s-" % idStr
+        results["id"] = "%s-" % idStr
 
         return results
 
-    def replaceDataDir(self, l):
-        # TODO: adjust this so it works equally well in windows and linux
-        #return l.replace("%DATADIR%", str(self.dataDirectory))
-
-        dataDirId = "%DATADIR%"
-
-        maxRepl = 64 # Make sure we don't get stuck
-        for r in range(maxRepl):
-            idx = l.find(dataDirId)
-            if idx < 0: # Nothing could be found
-                return l
-
-            offset = 0
-            p = idx+len(dataDirId)
-            if p < len(l) and l[p] in [ '\\', '/' ]:
-                offset = 1
-
-            l = l[:idx] + os.path.join(self.dataDirectory, l[idx+len(dataDirId)+offset:])
-
-        return l
