@@ -10,9 +10,9 @@ simpact.set.datadir <- function(dirName)
 	invisible(r)
 }
 
-simpact.run.direct <- function(configFile, outputfile = NULL, release = TRUE, slowalg = FALSE, parallel = FALSE, seed = -1, destdir=NULL)
+simpact.run.direct <- function(configFile, outputFile = NULL, release = TRUE, slowalg = FALSE, parallel = FALSE, seed = -1, destDir=NULL)
 {
-	r = simpact.python.call("simpactPythonInstance.runDirect", configFile, parallel, !slowalg, release, outputfile, seed, destdir)
+	r = simpact.python.call("simpactPythonInstance.runDirect", configFile, parallel, !slowalg, release, outputFile, seed, destDir)
 	invisible(r)
 }
 
@@ -41,5 +41,6 @@ simpact.getconfig <- function(configParams, show = FALSE)
 simpact.showconfig <- function(configParams)
 {
 	r = simpact.getconfig(configParams, show = TRUE)
+	invisible(r)
 }
 
