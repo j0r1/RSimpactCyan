@@ -3,9 +3,9 @@
 	fileName <- system.file("simpactStart.py", package=pkgname)
 	dirName <- dirname(fileName)
 
-	python.exec(paste("import sys; sys.path.append('",dirName,"')", sep=""))
-	python.load(fileName)
-	python.exec("simpactPythonInstance = SimpactPython()")
+	pithon.exec(paste("import sys; sys.path.append('",dirName,"')", sep=""), instance.name="simpact")
+	pithon.load(fileName, instance.name="simpact")
+	pithon.exec("simpactPythonInstance = SimpactPython()", instance.name="simpact")
 }
 
 .onAttach <- function(libname, pkgname)

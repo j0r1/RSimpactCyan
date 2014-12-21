@@ -1,29 +1,29 @@
 simpact.set.simulation <- function(simulationName)
 {
-	r = simpact.python.call("simpactPythonInstance.setSimulationPrefix", simulationName)
+	r = pithon.call("simpactPythonInstance.setSimulationPrefix", simulationName, instance.name="simpact")
 	invisible(r)
 }
 
 simpact.set.datadir <- function(dirName)
 {
-	r = simpact.python.call("simpactPythonInstance.setSimpactDataDirectory", dirName)
+	r = pithon.call("simpactPythonInstance.setSimpactDataDirectory", dirName, instance.name="simpact")
 	invisible(r)
 }
 
 simpact.run.direct <- function(configFile, outputFile = NULL, release = TRUE, slowalg = FALSE, parallel = FALSE, seed = -1, destDir=NULL)
 {
-	r = simpact.python.call("simpactPythonInstance.runDirect", configFile, parallel, !slowalg, release, outputFile, seed, destDir)
+	r = pithon.call("simpactPythonInstance.runDirect", configFile, parallel, !slowalg, release, outputFile, seed, destDir, instance.name="simpact")
 	invisible(r)
 }
 
 simpact.run <- function(configParams, destDir, agedist = simpact.sa2003, intervention = NULL, release = TRUE, slowalg = FALSE, parallel=FALSE, seed=-1, dryrun = FALSE)
 {
-	r = simpact.python.call("simpactPythonInstance.run", configParams, destDir, agedist, parallel, !slowalg, release, seed, intervention, dryrun)
+	r = pithon.call("simpactPythonInstance.run", configParams, destDir, agedist, parallel, !slowalg, release, seed, intervention, dryrun, instance.name="simpact")
 }
 
 simpact.getconfig <- function(configParams, show = FALSE)
 {
-	r = simpact.python.call("simpactPythonInstance.getConfiguration", configParams, show)
+	r = pithon.call("simpactPythonInstance.getConfiguration", configParams, show, instance.name="simpact")
 
 	cfg <- list()
 	num <- length(r)
