@@ -191,7 +191,7 @@ class SimpactPython(object):
 
         return self.execPrefix + "-" + timeStr + "_" + pidStr + "_" + rndStr
 
-    def run(self, config, destDir, agedist, parallel = False, opt = True, release = True, seed = -1, interventionConfig = None, dryRun = False):
+    def run(self, config, destDir, agedist = None, parallel = False, opt = True, release = True, seed = -1, interventionConfig = None, dryRun = False):
 
         if not destDir:
             raise Exception("A destination directory must be specified")
@@ -200,14 +200,36 @@ class SimpactPython(object):
         if not config:
             config = { }
 
-        distAges = agedist["Age"]
-        distMalePct = agedist["Percent.Male"]
-        distFemalePct = agedist["Percent.Female"]
-
-        if len(distAges) != len(distMalePct) or len(distAges) != len(distFemalePct):
-            raise Exception("Not all columns of the 'agedist' variable seem to have the same length")
-
         idStr = self.getID()
+
+        distFile = None
+        if agedist is not None:
+            if isinstance(agedist, dict):
+                distAges = agedist["Age"]
+
+                if "Percent.Male" in agedist:
+                    distMalePct = agedist["Percent.Male"]
+                elif "Percent Male" in agedist:
+                    distMalePct = agedist["Percent Male"]
+                else:
+                    raise Exception("Error in age distribution: Key for male percentage must be 'Percent.Male' or 'Percent Male'")
+
+                if "Percent.Female" in agedist:
+                    distFemalePct = agedist["Percent.Female"]
+                elif "Percent Female" in agedist:
+                    distFemalePct = agedist["Percent Female"]
+                else:
+                    raise Exception("Error in age distribution: Key for female percentage must be 'Percent.Female' or 'Percent Female'")
+
+                if len(distAges) != len(distMalePct) or len(distAges) != len(distFemalePct):
+                    raise Exception("Not all columns of the 'agedist' variable seem to have the same length")
+
+                distFile = "%s-agedist.csv" % idStr
+                config["population.agedistfile"] = distFile
+
+            else: # Assume we're referring to a file
+
+                config["population.agedistfile"] = str(ageDist)
 
         # The config files will be overridden to make sure we write in the specified
         # destination directory
@@ -219,10 +241,6 @@ class SimpactPython(object):
         config["logsystem.filename.persons"] = personLog
         config["logsystem.filename.relations"] = relationLog
         config["logsystem.filename.treatments"] = treatmentLog
-
-        #distFile = os.path.abspath(os.path.join(destDir, "simpact-%s-agedist.csv" % idStr))
-        distFile = "%s-agedist.csv" % idStr
-        config["population.agedistfile"] = distFile
 
         # Intervention event stuff
 
@@ -296,9 +314,10 @@ class SimpactPython(object):
         if os.path.exists(outputFile):
             raise Exception("Want to write to output file '%s', but this already exists" % outputFile)
 
-        fullDistFile = os.path.abspath(os.path.join(destDir, distFile))
-        if os.path.exists(fullDistFile):
-            raise Exception("Want to write to age distribution file '%s', but this already exists" % fullDistFile)
+        if distFile:
+            fullDistFile = os.path.abspath(os.path.join(destDir, distFile))
+            if os.path.exists(fullDistFile):
+                raise Exception("Want to write to age distribution file '%s', but this already exists" % fullDistFile)
 
         # Write the config file
         with open(configFile, "wt") as f:
@@ -306,12 +325,13 @@ class SimpactPython(object):
                 f.write(l + "\n")
             f.close()
 
-        # Write the age distribution file
-        with open(fullDistFile, "wt") as f:
-            f.write("Age,Percent Male,Percent Female\n")
-            for i in range(len(distAges)):
-                f.write("%g,%g,%g\n" % (distAges[i], distMalePct[i], distFemalePct[i]))
-            f.close()
+        if distFile:
+            # Write the age distribution file
+            with open(fullDistFile, "wt") as f:
+                f.write("Age,Percent Male,Percent Female\n")
+                for i in range(len(distAges)):
+                    f.write("%g,%g,%g\n" % (distAges[i], distMalePct[i], distFemalePct[i]))
+                f.close()
 
         # write intervention config files
         if intTimes:
@@ -344,8 +364,12 @@ class SimpactPython(object):
         results["logtreatments"] = os.path.join(destDir, treatmentLog) 
         results["configfile"] = os.path.join(destDir, configFile)
         results["outputfile"] = os.path.join(destDir, outputFile)
-        results["agedistfile"] = os.path.join(destDir, distFile)
         results["id"] = "%s-" % idStr
+
+        if distFile:
+            results["agedistfile"] = os.path.join(destDir, distFile)
+        else:
+            results["agedistfile"] = finalConfig["population.agedistfile"]
 
         return results
 
