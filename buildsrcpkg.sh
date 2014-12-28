@@ -21,16 +21,14 @@ cd $TMPDIR
 rm -f `find ${LIBNAME}-${VERSION} -name ".hg*"`
 rm ${LIBNAME}-${VERSION}/buildsrcpkg.sh
 rm ${LIBNAME}-${VERSION}/buildpkg.py
-	
-if ! tar cfz ${LIBNAME}_${VERSION}.tar.gz ${LIBNAME}-${VERSION}/ ; then
-	echo "Couldn't create archive"
-	exit -1
-fi
+
+cd ${LIBNAME}-${VERSION}/
+R CMD build .
+mv *.tar.gz ..
 
 TMPDIRNAME=`basename $TMPDIR`
 mv $TMPDIR $CURDIR/
 cd $CURDIR/$TMPDIRNAME
 mkdir -p src/contrib/
-cp ${LIBNAME}-${VERSION}/DESCRIPTION src/contrib/PACKAGES
-mv ${LIBNAME}_${VERSION}.tar.gz src/contrib/
+mv *.tar.gz src/contrib/
 rm -r ${LIBNAME}-${VERSION}
