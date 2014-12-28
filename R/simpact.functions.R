@@ -1,28 +1,55 @@
+simpact.available <- function()
+{
+	if (!pithon.available(instance.name="simpact"))
+		return(FALSE)
+	
+	if (!pithon.call('isSimpactCyanAvailable', instance.name="simpact"))
+		return(FALSE)
+
+	return(TRUE)
+}
+
+check.available <- function()
+{
+	if (!simpact.available())
+		stop("Either the Simpact Cyan binaries is not available, or Python is not available")
+}
+
 simpact.set.simulation <- function(simulationName)
 {
+	check.available()
+
 	r = pithon.call("simpactPythonInstance.setSimulationPrefix", simulationName, instance.name="simpact")
 	invisible(r)
 }
 
 simpact.set.datadir <- function(dirName)
 {
+	check.available()
+
 	r = pithon.call("simpactPythonInstance.setSimpactDataDirectory", dirName, instance.name="simpact")
 	invisible(r)
 }
 
 simpact.run.direct <- function(configFile, outputFile = NULL, release = TRUE, slowalg = FALSE, parallel = FALSE, seed = -1, destDir=NULL)
 {
+	check.available()
+
 	r = pithon.call("simpactPythonInstance.runDirect", configFile, parallel, !slowalg, release, outputFile, seed, destDir, instance.name="simpact")
 	invisible(r)
 }
 
 simpact.run <- function(configParams, destDir, agedist = simpact.sa2003, intervention = NULL, release = TRUE, slowalg = FALSE, parallel=FALSE, seed=-1, dryrun = FALSE)
 {
+	check.available()
+
 	r = pithon.call("simpactPythonInstance.run", configParams, destDir, agedist, parallel, !slowalg, release, seed, intervention, dryrun, instance.name="simpact")
 }
 
 simpact.getconfig <- function(configParams, show = FALSE)
 {
+	check.available()
+
 	r = pithon.call("simpactPythonInstance.getConfiguration", configParams, show, instance.name="simpact")
 
 	cfg <- list()
@@ -40,7 +67,10 @@ simpact.getconfig <- function(configParams, show = FALSE)
 
 simpact.showconfig <- function(configParams)
 {
+	check.available()
+
 	r = simpact.getconfig(configParams, show = TRUE)
 	invisible(r)
 }
+
 
