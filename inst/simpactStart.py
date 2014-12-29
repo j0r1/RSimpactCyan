@@ -12,8 +12,8 @@ for p in paths:
 
 simpactPythonInstance = None
 try:
-    import simpactcyan
-    simpactPythonInstance = simpactcyan.SimpactPython()
+    import pysimpactcyan
+    simpactPythonInstance = pysimpactcyan.PySimpactCyan()
 except:
     pass
 
