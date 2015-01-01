@@ -1,12 +1,11 @@
 #!/usr/bin/env python
 
-from __future__ import print_function
 import os
 import sys
 import subprocess
-import platform
 import shutil
-import string
+import buildsrcdist
+import platform
 
 def getPackageFileName(logFileName):
     with open(logFileName, "rt") as f:
@@ -18,10 +17,15 @@ def getPackageFileName(logFileName):
                 s = " as "
                 idx = l.find(s)
                 if idx >= 0:
-                    startPos = l.find("R", idx)
+                    idx += 4
+		    while not l[idx].isalpha():
+			    idx += 1
+
+		    startPos = idx
                     endPos = len(l)-1
-                    while l[endPos] not in string.letters:
+		    while not l[endPos].isalpha():
                         endPos -= 1
+
                     return l[startPos:endPos+1]
 
             l = f.readline()
@@ -36,14 +40,16 @@ def main():
     tmpLibDir = os.path.join(instDir, "tmpLibDir")
     os.mkdir(tmpLibDir)
     
-    if platform.system() == "Windows": # Windows
-        Rexe = "c:\\Program Files\\R\\R-3.1.2\\bin\\R.exe"
-    else:
-        Rexe = "R"
+    Rexe = buildsrcdist.getRCommand();
+    tmpSrcDir, srcPackName = buildsrcdist.createSourcePackage(Rexe)
 
     logFileName = "rlogfile"
-    with open(logFileName, "wt") as logfile:
-        subprocess.call([ Rexe, "CMD", "INSTALL", curDir, "--build", "-l", tmpLibDir ], stdout=logfile, stderr=logfile)
+
+    try:
+        with open(logFileName, "wt") as logfile:
+            subprocess.call([ Rexe, "CMD", "INSTALL", os.path.join(tmpSrcDir, srcPackName), "--build", "-l", tmpLibDir ], stdout=logfile, stderr=logfile)
+    finally:
+        shutil.rmtree(tmpSrcDir)
 
     pkgFile = getPackageFileName(logFileName)
     os.remove(logFileName)
@@ -53,14 +59,11 @@ def main():
     if platform.system() == "Windows": # Windows
         os.makedirs("bin/windows/contrib/3.1/")
         shutil.move(pkgFile, "bin/windows/contrib/3.1/")
-        shutil.copy(os.path.join(curDir,"DESCRIPTION"), "bin/windows/contrib/3.1/PACKAGES")
     elif platform.system() == "Darwin": # OS X
         os.makedirs("bin/macosx/mavericks/contrib/3.1/")
         os.makedirs("bin/macosx/contrib/3.0/")
         shutil.copy(pkgFile, "bin/macosx/mavericks/contrib/3.1/")
         shutil.move(pkgFile, "bin/macosx/contrib/3.0/")
-        shutil.copy(os.path.join(curDir,"DESCRIPTION"), "bin/macosx/mavericks/contrib/3.1/PACKAGES")
-        shutil.copy(os.path.join(curDir,"DESCRIPTION"), "bin/macosx/contrib/3.0/PACKAGES")
     else:
         print("Unknown platform, not creating directory structure")
 
