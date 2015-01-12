@@ -11,7 +11,7 @@
 	\item{configParams}{A list containing key/value pairs which specifies configuration
 	                    parameters to be set to a non-default value. Set to NULL to use
 			    only the default values.}
-	\item{destDir}{The full configuration file created based on the \core{configParams}
+	\item{destDir}{The full configuration file created based on the \code{configParams}
 	               list will be stored here, as well as various output logs produced
 		       by the simulation.}
 	\item{agedist}{The age distribution, either specified as a CSV filename or as an R
