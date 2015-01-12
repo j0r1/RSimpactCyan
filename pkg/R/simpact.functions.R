@@ -4,8 +4,8 @@ checkLoaded <- function()
 	if (!pkg.env$internalCheckLoadedFlag)
 	{
 		pkg.env$internalCheckLoadedFlag <- TRUE
-		print("Doing first pithon.load")
-		print(pkg.env$internalPythonScriptFileName)
+		#print("Doing first pithon.load")
+		#print(pkg.env$internalPythonScriptFileName)
 		pithon.load(pkg.env$internalPythonScriptFileName, instance.name="simpact")
 	}
 }
