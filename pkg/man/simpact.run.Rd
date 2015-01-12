@@ -26,8 +26,7 @@
 }
 
 \examples{
-	TODO
 }
 
-\keyword{ simpact }
+\keyword{manip}
 

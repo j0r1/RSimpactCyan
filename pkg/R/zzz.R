@@ -1,9 +1,10 @@
+pkg.env <- new.env()
+pkg.env$internalPythonScriptFileName <- ""
+pkg.env$internalCheckLoadedFlag <- FALSE
+
 .onLoad <- function(libname, pkgname)
 {
-	fileName <- system.file("simpactStart.py", package=pkgname)
-	dirName <- dirname(fileName)
-
-	pithon.load(fileName, instance.name="simpact")
+	pkg.env$internalPythonScriptFileName <- system.file("simpactStart.py", package=pkgname)
 }
 
 .onAttach <- function(libname, pkgname)
