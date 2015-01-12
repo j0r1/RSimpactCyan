@@ -1,0 +1,16 @@
+---
+title: "RSimpactCyan"
+author: "Jori Liesenborgs"
+date: "2015-01-12"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\usepackage[utf8]{inputenc}
+---
+
+RSimpactCyan
+============
+
+TODO
+
