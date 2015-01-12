@@ -13,7 +13,8 @@
 }
 \arguments{
 	\item{configParams}{A list containing key/value pairs which specifies configuration
-	                    parameters to be set to a non-default value.}
+	                    parameters to be set to a non-default value. Set to NULL to
+			    view all the default values.}
 	\item{show}{If \code{TRUE}, the on-screen output of \code{simpact.getconfig} will
 	            be the same as that of \code{simpact.showconfig}}
 }
