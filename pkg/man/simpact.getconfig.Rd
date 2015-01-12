@@ -50,7 +50,7 @@
 		cfg["population.nummen"] <- 1000
 		cfg["population.numwomen"] <- 1000
 		
-		cfgFull <- simpact.getconfig(cfg, TRUE)
+		cfgFull <- simpact.getconfig(cfg)
 
 		print("Number of men:") # We set this to 1000
 		print(cfgFull["population.nummen"])
