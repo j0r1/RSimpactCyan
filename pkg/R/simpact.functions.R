@@ -53,7 +53,7 @@ simpact.run.direct <- function(configFile, outputFile = NULL, release = TRUE, sl
 	invisible(r)
 }
 
-simpact.run <- function(configParams, destDir, agedist = simpact.sa2003, intervention = NULL, release = TRUE, slowalg = FALSE, parallel=FALSE, seed=-1, dryrun = FALSE)
+simpact.run <- function(configParams, destDir, agedist = "${SIMPACT_DATA_DIR}sa_2003.csv", intervention = NULL, release = TRUE, slowalg = FALSE, parallel=FALSE, seed=-1, dryrun = FALSE)
 {
 	check.available()
 

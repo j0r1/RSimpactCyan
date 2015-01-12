@@ -1,2 +1,3 @@
 exportPattern("^simpact")
-importFrom(rPithon)
+import(rPithon)
+import(utils)

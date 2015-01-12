@@ -7,8 +7,3 @@ pkg.env$internalCheckLoadedFlag <- FALSE
 	pkg.env$internalPythonScriptFileName <- system.file("simpactStart.py", package=pkgname)
 }
 
-.onAttach <- function(libname, pkgname)
-{
-	data("simpact.sa2003")
-	data("simpact.sa2013")
-}

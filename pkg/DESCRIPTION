@@ -7,7 +7,7 @@ Author: Jori Liesenborgs @ Hasselt University
 Maintainer: Jori Liesenborgs <jori.liesenborgs@uhasselt.be>
 Description: This package contains functions to work with the Simpact Cyan
 	executables from within an R session.
-Depends: rPithon (>= 1.0-2), utils
+Imports: rPithon (>= 1.0-2), utils
 License: GPL-2
 Suggests: knitr
 VignetteBuilder: knitr

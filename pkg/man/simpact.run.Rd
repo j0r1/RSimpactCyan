@@ -5,7 +5,7 @@
 	Perform a simulation using the SimpactCyan binaries.
 }
 \usage{
- 	simpact.run(configParams, destDir, agedist = simpact.sa2003, intervention = NULL, release = TRUE, slowalg = FALSE, parallel=FALSE, seed=-1, dryrun = FALSE)
+ 	simpact.run(configParams, destDir, agedist = "${SIMPACT_DATA_DIR}sa_2003.csv", intervention = NULL, release = TRUE, slowalg = FALSE, parallel=FALSE, seed=-1, dryrun = FALSE)
 }
 \arguments{
 	\item{configParams}{A list containing key/value pairs which specifies configuration
