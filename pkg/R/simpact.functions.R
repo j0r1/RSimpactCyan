@@ -49,6 +49,11 @@ simpact.run.direct <- function(configFile, outputFile = NULL, release = TRUE, sl
 {
 	check.available()
 
+	if (!is.null(configFile))
+		configFile <- configFile[[1]]
+	if (!is.null(outputFile))
+		outputFile <- outputFile[[1]]
+
 	r = pithon.call("simpactPythonInstance.runDirect", configFile, parallel, !slowalg, release, outputFile, seed, destDir, instance.name="simpact")
 	invisible(r)
 }
