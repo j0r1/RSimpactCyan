@@ -53,6 +53,17 @@ simpact.run.direct(configFile, outputFile = NULL, release = TRUE, slowalg = FALS
 }
 
 \examples{
+
+	if (simpact.available()) {
+	
+		# First, prepare a run (default config) with the 'dryrun' option
+		r <- simpact.run(NULL, tempdir(), dryrun=TRUE)
+		
+		# Then, we'll perform 'simpact.run.direct' to actually do the simulation.
+		simpact.run.direct(r["configfile"], r["outputfile"])
+
+		file.show(r["outputfile"])
+	}
 }
 
 \keyword{manip}
