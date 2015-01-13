@@ -46,7 +46,14 @@ simpact.run.direct(configFile, outputFile = NULL, release = TRUE, slowalg = FALS
 		       this directory name can be specified here.}
 }
 \details{
-	TODO
+	This command does basically the same as running one of the SimpactCyan
+	executable from the command line. Since doing that would need a complete
+	configuration file as input, with this command you'll need to specify
+	the path of a working configuration file.
+
+	While you can run simulations from R in this way, as shown in the example,
+	you'd normally not do this. Instead, you'd just use the \code{\link{simpact.run}}
+	command.
 }
 \value{
  	None.
@@ -58,12 +65,13 @@ simpact.run.direct(configFile, outputFile = NULL, release = TRUE, slowalg = FALS
 	
 		# First, prepare a run (default config) with the 'dryrun' option
 		r <- simpact.run(NULL, tempdir(), dryrun=TRUE)
-		
+
 		# Then, we'll perform 'simpact.run.direct' to actually do the simulation.
 		simpact.run.direct(r["configfile"], r["outputfile"])
 
 		file.show(r["outputfile"])
 	}
+
 }
 
 \keyword{manip}
