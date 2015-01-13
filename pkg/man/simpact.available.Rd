@@ -5,7 +5,7 @@
 	Checks if SimpactCyan simulations can run using these R bindings.
 }
 \usage{
-	simpact.available()
+simpact.available()
 }
 \details{
 	Checks if SimpactCyan simulations can run using these R bindings. If not, either

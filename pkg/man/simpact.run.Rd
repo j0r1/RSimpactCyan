@@ -5,7 +5,9 @@
 	Perform a simulation using the SimpactCyan binaries.
 }
 \usage{
- 	simpact.run(configParams, destDir, agedist = "${SIMPACT_DATA_DIR}sa_2003.csv", intervention = NULL, release = TRUE, slowalg = FALSE, parallel=FALSE, seed=-1, dryrun = FALSE)
+simpact.run(configParams, destDir, agedist = "${SIMPACT_DATA_DIR}sa_2003.csv", 
+            intervention = NULL, release = TRUE, slowalg = FALSE, 
+            parallel=FALSE, seed=-1, dryrun = FALSE)
 }
 \arguments{
 	\item{configParams}{A list containing key/value pairs which specifies configuration
@@ -54,21 +56,34 @@
 		      on a different computer.}
 }
 \details{
-	TODO: link to \code{\link{simpact.showconfig}}
+	Based on the specified configuration in \code{configParams}, a full configuration
+	file for the SimpactCyan program will be created. The \code{configParams} parameter
+	should be a list with key/value pairs that will be combined with the program
+	defaults when creating this config file. To verify that this parameter is correct
+	and to view the full configuration file that will be used, the \code{\link{simpact.showconfig}}
+	function can be used. This will also give an overview of all parameters which
+	can be configured.
 
-	TODO: these keys are overwritten
+	A number of settings will be overwritten based on the other parameters present in
+	this \code{simpact.run} function call. It is allowed to set these in your
+	\code{configParams}, but the values that you specified will not be used.
+	These configuration parameter keys currently are:
 
-	population.agedistfile
-	logsystem.filename.events
-	logsystem.filename.persons
-	logsystem.filename.relations
-	logsystem.filename.treatments
-	intervention.enabled
-	intervention.times
-	intervention.fileids
-	intervention.baseconfigname
+	\itemize{
+		\item \code{population.agedistfile}: this will be overwritten depending
+		      on what you specified in the \code{agedist} parameter.
+		\item \code{logsystem.filename.events}, \code{logsystem.filename.persons},
+		      \code{logsystem.filename.relations} and \code{logsystem.filename.treatments}: 
+		      these will be set to the log files produced by the simulation.
+		\item \code{intervention.enabled}, \code{intervention.times}, \code{intervention.fileids},
+		      and \code{intervention.baseconfigname}: these will be set based on the
+		      \code{intervention} parameter you passed to this function.
+	}
 
-	TODO: \code{${SIMPACT_DATA_DIR}}
+	The default parameter for \code{agedist} is \code{"${SIMPACT_DATA_DIR}sa_2003.csv"},
+	meaning that the file \code{sa_2003.csv} will be used that is present as data in the
+	installed SimpactCyan binary package. In general, \code{"${SIMPACT_DATA_DIR}"} will
+	be replaced by the data directory of the SimpactCyan binary package.
 }
 \value{
  	Returns a data structure containing information about the files
@@ -109,14 +124,16 @@
 
 \examples{
 	if (simpact.available()) {
-		# Perform a run with all default parameters
-		r <- simpact.run(NULL, "/tmp/simpacttests")
+		# Perform a run with all default parameters. Note that
+		# tempdir() will only exist while the R session is running,
+		# so do not use this for results that should be kept longer.
+		r <- simpact.run(NULL, tempdir())
 
 		# Use a config file
 		cfg <- list()
 		cfg["population.nummen"] <- 250
 		cfg["population.numwomen"] <- 250
-		r <- simpact.run(cfg, "/tmp/simpacttests")
+		r <- simpact.run(cfg, tempdir())
 
 		# Read the person log file
 		p <- read.csv(r["logpersons"])
@@ -136,7 +153,8 @@
 		# a list of these lists
 		interventions <- list(iv1, iv2)
 		
-		r <- simpact.run(cfg, "/tmp/simpacttests", intervention=interventions)
+		r <- simpact.run(cfg, tempdir(), intervention=interventions)
+		r
 	}
 }
 
