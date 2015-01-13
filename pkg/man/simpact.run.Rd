@@ -16,7 +16,8 @@
 		       by the simulation.}
 	\item{agedist}{The age distribution, either specified as a CSV filename or as an R
 	               table. This should have an 'Age' column, a 'Percent.Male' column and
-		       a 'Percent.Female' column.}
+		       a 'Percent.Female' column. The default is the file \code{sa_2003.csv}
+		       that comes with the SimpactCyan binary package.}
 	\item{intervention}{The SimpactCyan simulations support an 'intervention event',
 	                    which can modify parameters that were previously read from the
 			    config file. List is a each intervention itself is a list that
@@ -53,7 +54,9 @@
 		      on a different computer.}
 }
 \details{
-	TODO
+	TODO: link to \code{\link{simpact.showconfig}}
+
+	TODO: these keys are overwritten
 
 	population.agedistfile
 	logsystem.filename.events
@@ -64,12 +67,77 @@
 	intervention.times
 	intervention.fileids
 	intervention.baseconfigname
+
+	TODO: \code{${SIMPACT_DATA_DIR}}
 }
 \value{
- 	TODO
+ 	Returns a data structure containing information about the files
+	used by the simulation, as well as the log files that are produced.
+	Calling the returnvalue \code{ret}, this data structure contains
+	the following items:
+	\itemize{
+		\item \code{ret["configfile"]}: This is the complete
+		      config file used by the simulation.
+		\item \code{ret["agedistfile"]}: The path to the CSV file
+		      containing the age distribution which was used in
+		      initializing the population.
+		\item \code{ret["outputfile"]}: Full path to the output
+		      that the program normally writes to the screen (and
+		      is shown on screen as well). This provides very
+		      useful information, like the version number, the
+		      type of run done (parallel, with debug information,
+		      slow algorithm version, ...) as well as the seed
+		      used for the random number generator.
+		\item \code{ret["logevents"]}: Full path to a log file describing
+		      which events took place at which time. This is written as
+		      a file with comma separated values, but depending on the
+		      event, the number of columns used can change.
+		\item \code{ret["logpersons"]}: Full path to the CSV file containing information
+		      about the persons in the simulation.
+		\item \code{ret["logrelations"]}: Full path to the CSV file containing information
+		      about which relationships were formed in the simulation.
+		\item \code{ret["logtreatments"]}: Full path to the CSV file containing information
+		      about HIV treatments that took place.
+		\item \code{ret["id"]}: A prefix that's used in all files used
+		      in this simulation.
+	}
+
+	If the \code{dryrun} parameter was set to \code{TRUE}, the log files 
+	will not yet exist. When the simulation is actually executed however, these 
+	are the files in which log information will be written.
 }
 
 \examples{
+	if (simpact.available()) {
+		# Perform a run with all default parameters
+		r <- simpact.run(NULL, "/tmp/simpacttests")
+
+		# Use a config file
+		cfg <- list()
+		cfg["population.nummen"] <- 250
+		cfg["population.numwomen"] <- 250
+		r <- simpact.run(cfg, "/tmp/simpacttests")
+
+		# Read the person log file
+		p <- read.csv(r["logpersons"])
+
+		# Set some intervention events as well: we'll modify
+		# a parameter of the hazard of formation (is 0.1)
+		# by default
+		iv1 <- list()
+		iv1["time"] <- 5.0
+		iv1["formation.hazard.agegap.baseline"] <- 2.3
+
+		iv2 <- list()
+		iv2["time"] <- 10.0
+		iv2["formation.hazard.agegap.baseline"] <- 0.4
+
+		# The actual parameter to the 'simpact.run' call is
+		# a list of these lists
+		interventions <- list(iv1, iv2)
+		
+		r <- simpact.run(cfg, "/tmp/simpacttests", intervention=interventions)
+	}
 }
 
 \keyword{manip}

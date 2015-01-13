@@ -8,8 +8,8 @@
 	a parameter.
 }
 \usage{
- 	simpact.getconfig(configParams, show = FALSE)
-	simpact.showconfig(configParams)
+  simpact.getconfig(configParams, show = FALSE)
+  simpact.showconfig(configParams)
 }
 \arguments{
 	\item{configParams}{A list containing key/value pairs which specifies configuration
