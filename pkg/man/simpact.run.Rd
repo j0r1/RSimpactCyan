@@ -7,7 +7,8 @@
 \usage{
 simpact.run(configParams, destDir, agedist = "${SIMPACT_DATA_DIR}sa_2003.csv", 
             intervention = NULL, release = TRUE, slowalg = FALSE, 
-            parallel=FALSE, seed=-1, dryrun = FALSE)
+            parallel = FALSE, seed = -1, dryrun = FALSE,
+            identifierFormat = "\%T-\%y-\%m-\%d-\%H-\%M-\%S_\%p_\%r\%r\%r\%r\%r\%r\%r\%r-")
 }
 \arguments{
 	\item{configParams}{A list containing key/value pairs which specifies configuration
@@ -54,6 +55,10 @@ simpact.run(configParams, destDir, agedist = "${SIMPACT_DATA_DIR}sa_2003.csv",
 		      not be executed. Using this option allows you to prepare configuration
 		      files in advance, which can even be executed by a SimpactCyan program
 		      on a different computer.}
+	\item{identifierFormat}{The filenames created by the SimpactCyan simulation will
+	                        start with a certain identifier. The format of this identifier
+				is specified by this parameter. See the details for more
+				information.}
 }
 \details{
 	Based on the specified configuration in \code{configParams}, a full configuration
@@ -84,6 +89,27 @@ simpact.run(configParams, destDir, agedist = "${SIMPACT_DATA_DIR}sa_2003.csv",
 	meaning that the file \code{sa_2003.csv} will be used that is present as data in the
 	installed SimpactCyan binary package. In general, \code{"${SIMPACT_DATA_DIR}"} will
 	be replaced by the data directory of the SimpactCyan binary package.
+
+	Files that are created by the simulation will all start with the same identifier,
+	which will also be mentioned in the data structure returned by this function. The
+	\code{identifierFormat} parameter specifies what this identifier should be. Special
+	properties start with a percent (\%) sign, other things are just copied. An overview
+	of these special properties:
+	\itemize{
+		\item \code{\%T}: will expand to the simulation type, e.g. \code{simpact-cyan}
+		                  or \code{maxart}
+		\item \code{\%y}: the current year 
+		\item \code{\%m}: the current month (number)
+		\item \code{\%d}: the current day of the month
+		\item \code{\%H}: the current hour
+		\item \code{\%M}: the current minute
+		\item \code{\%S}: the current second
+		\item \code{\%p}: the process ID of the process starting the simulation
+		\item \code{\%r}: a random character
+	}
+
+	The default identifier format \code{\%T-\%y-\%m-\%d-\%H-\%M-\%S_\%p_\%r\%r\%r\%r\%r\%r\%r\%r-}
+	would lead to an identifier like \code{simpact-cyan-2015-01-15-08-28-10_2425_q85z7m1G-}.
 }
 \value{
  	Returns a data structure containing information about the files
