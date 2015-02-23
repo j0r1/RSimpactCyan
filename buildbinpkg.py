@@ -62,8 +62,10 @@ def main():
     elif platform.system() == "Darwin": # OS X
         os.makedirs("bin/macosx/mavericks/contrib/3.1/")
         os.makedirs("bin/macosx/contrib/3.0/")
+        os.makedirs("bin/macosx/contrib/3.1/")
         shutil.copy(pkgFile, "bin/macosx/mavericks/contrib/3.1/")
-        shutil.move(pkgFile, "bin/macosx/contrib/3.0/")
+        shutil.copy(pkgFile, "bin/macosx/contrib/3.0/")
+        shutil.move(pkgFile, "bin/macosx/contrib/3.1/")
     else:
         print("Unknown platform, not creating directory structure")
 
