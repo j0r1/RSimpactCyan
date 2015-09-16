@@ -1,6 +1,11 @@
 import sys
 import os
 
+try:
+    sys.dont_write_bytecode = True
+except:
+    pass
+
 paths = [ ]
 paths += [ "C:\\Program Files (x86)\\SimpactCyan\\python\\", "C:\\Program Files\\SimpactCyan\\python\\" ]
 paths += [ "/usr/share/simpact-cyan/python/", "/usr/local/share/simpact-cyan/python/" ]
