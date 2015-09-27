@@ -58,11 +58,11 @@ simpact.run.direct <- function(configFile, outputFile = NULL, release = TRUE, sl
 	invisible(r)
 }
 
-simpact.run <- function(configParams, destDir, agedist = "${SIMPACT_DATA_DIR}sa_2003.csv", intervention = NULL, release = TRUE, slowalg = FALSE, parallel=FALSE, seed=-1, dryrun = FALSE, identifierFormat = "%T-%y-%m-%d-%H-%M-%S_%p_%r%r%r%r%r%r%r%r-")
+simpact.run <- function(configParams, destDir, agedist = "${SIMPACT_DATA_DIR}sa_2003.csv", intervention = NULL, release = TRUE, slowalg = FALSE, parallel=FALSE, seed=-1, dryrun = FALSE, identifierFormat = "%T-%y-%m-%d-%H-%M-%S_%p_%r%r%r%r%r%r%r%r-", data.files = NULL)
 {
 	check.available()
 
-	r = pithon.call("simpactPythonInstance.run", configParams, destDir, agedist, parallel, !slowalg, release, seed, intervention, dryrun, identifierFormat, instance.name="simpact")
+	r = pithon.call("simpactPythonInstance.run", configParams, destDir, agedist, parallel, !slowalg, release, seed, intervention, dryrun, identifierFormat, data.files, instance.name="simpact")
 }
 
 simpact.getconfig <- function(configParams, show = FALSE)
