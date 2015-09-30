@@ -8,7 +8,8 @@
 simpact.run(configParams, destDir, agedist = "${SIMPACT_DATA_DIR}sa_2003.csv", 
             intervention = NULL, release = TRUE, slowalg = FALSE, 
             parallel = FALSE, seed = -1, dryrun = FALSE,
-            identifierFormat = "\%T-\%y-\%m-\%d-\%H-\%M-\%S_\%p_\%r\%r\%r\%r\%r\%r\%r\%r-")
+            identifierFormat = "\%T-\%y-\%m-\%d-\%H-\%M-\%S_\%p_\%r\%r\%r\%r\%r\%r\%r\%r-",
+	    dataFiles = NULL)
 }
 \arguments{
 	\item{configParams}{A list containing key/value pairs which specifies configuration
