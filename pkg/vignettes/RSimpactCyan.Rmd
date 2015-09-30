@@ -1,7 +1,7 @@
 ---
 title: "RSimpactCyan"
 author: "Jori Liesenborgs"
-date: "2015-01-12"
+date: "2015-09-30"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Vignette Title}
@@ -12,5 +12,5 @@ vignette: >
 RSimpactCyan
 ============
 
-TODO
+Detailed documentation can be found at http://research.edm.uhasselt.be/jori/simpact/
 

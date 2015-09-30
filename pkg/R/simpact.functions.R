@@ -62,7 +62,12 @@ simpact.run <- function(configParams, destDir, agedist = "${SIMPACT_DATA_DIR}sa_
 {
 	check.available()
 
-	r = pithon.call("simpactPythonInstance.run", configParams, destDir, agedist, parallel, !slowalg, release, seed, intervention, dryrun, identifierFormat, dataFiles, instance.name="simpact")
+    # Using this extra check should make sure that everything keeps working with older simpact binaries
+    if (is.null(dataFiles)) {
+	    r = pithon.call("simpactPythonInstance.run", configParams, destDir, agedist, parallel, !slowalg, release, seed, intervention, dryrun, identifierFormat, instance.name="simpact")
+    } else {
+        r = pithon.call("simpactPythonInstance.run", configParams, destDir, agedist, parallel, !slowalg, release, seed, intervention, dryrun, identifierFormat, dataFiles, instance.name="simpact")
+    }
 }
 
 simpact.getconfig <- function(configParams, show = FALSE)

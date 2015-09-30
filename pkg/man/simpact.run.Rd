@@ -59,6 +59,10 @@ simpact.run(configParams, destDir, agedist = "${SIMPACT_DATA_DIR}sa_2003.csv",
 	                        start with a certain identifier. The format of this identifier
 				is specified by this parameter. See the details for more
 				information.}
+	\item{dataFiles}{A list of matrices can be passed here, where each list entry should have
+	                 a name. These matrices will be written to CSV files, to which you can
+			 refer by using a \code{"data:"} prefix in a \code{configParams} entry
+			 (see examples).}
 }
 \details{
 	Based on the specified configuration in \code{configParams}, a full configuration
@@ -181,6 +185,26 @@ simpact.run(configParams, destDir, agedist = "${SIMPACT_DATA_DIR}sa_2003.csv",
 		
 		r <- simpact.run(cfg, tempdir(), intervention=interventions)
 		r
+
+		# Let's tell the simulation to choose geographic coordinates
+		# for each person from a discrete distribution, based on a
+		# matrix
+		m <- matrix(c(1,2,3,4),2,2,byrow=TRUE)
+		data <- list()
+		data[["geoprob"]] <- m
+
+		cfg <- list()
+		cfg["person.geo.dist2d.type"] = "discrete"
+		# This will refer to the 'geoprob' entry in the list above
+		cfg["person.geo.dist2d.discrete.densfile"] = "data:geoprob"
+		cfg["person.geo.dist2d.discrete.width"] = 100
+		cfg["person.geo.dist2d.discrete.height"] = 100
+
+		# Here we pass the 'data' list to the simulation, which will
+		# convert the entries to CSV files
+		r <- simpact.run(cfg, tempdir(), dataFiles=data)
+		# In the person log, 10% will have an x-coord between 0 and 50
+		# and a y-coord between 50 and 100. 
 	}
 }
 
