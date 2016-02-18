@@ -1,7 +1,7 @@
 Package: RSimpactCyan
 Type: Package
 Title: R bindings for Simpact Cyan
-Version: 1.4-0
+Version: 1.4-1
 Date: 2015-09-30
 Author: Jori Liesenborgs @ Hasselt University
 Maintainer: Jori Liesenborgs <jori.liesenborgs@uhasselt.be>
