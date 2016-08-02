@@ -14,7 +14,9 @@ def getRCommand():
         for n in os.listdir("c:\\Program Files\\R\\"):
             print n
             if n.startswith("R-3"):
-                return "c:\\Program Files\\R\\" + n + "\\bin\\R.exe"
+                fn = "c:\\Program Files\\R\\" + n + "\\bin\\R.exe"
+                if os.path.exists(fn):
+                    return fn
         
         raise Exception("Unable to find R executable")
        
