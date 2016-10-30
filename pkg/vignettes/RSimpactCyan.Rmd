@@ -12,5 +12,5 @@ vignette: >
 RSimpactCyan
 ============
 
-Detailed documentation can be found at http://research.edm.uhasselt.be/jori/simpact/
+Detailed documentation can be found at http://simpactcyan.readthedocs.io
 
