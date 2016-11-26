@@ -4,22 +4,22 @@ checkLoaded <- function()
 	if (!pkg.env$internalCheckLoadedFlag)
 	{
 		pkg.env$internalCheckLoadedFlag <- TRUE
-		print("Doing first pithon.load")
-		print(pkg.env$internalPythonScriptFileName)
+		#print("Doing first pithon.load")
+		#print(pkg.env$internalPythonScriptFileName)
 		pithon.load(pkg.env$internalPythonScriptFileName, instance.name="simpact")
 	}
 }
 
 simpact.available <- function()
 {
-    print("Calling pithon.available")
+	#print("Calling pithon.available")
 	if (!pithon.available(instance.name="simpact"))
 		return(FALSE)
 	
-    print("Running checkLoaded")
+	#print("Running checkLoaded")
 	checkLoaded()
 
-    print("Calling isSimpactCyanAvailable")
+	#print("Calling isSimpactCyanAvailable")
 	if (!pithon.call('isSimpactCyanAvailable', instance.name="simpact"))
 		return(FALSE)
 
