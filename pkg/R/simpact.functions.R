@@ -40,6 +40,14 @@ simpact.set.simulation <- function(simulationName)
 	invisible(r)
 }
 
+simpact.set.exedir <- function(dirName)
+{
+	check.available()
+
+	r = pithon.call("simpactPythonInstance.setSimpactDirectory", dirName, instance.name="simpact")
+	invisible(r)
+}
+
 simpact.set.datadir <- function(dirName)
 {
 	check.available()
