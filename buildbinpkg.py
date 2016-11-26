@@ -41,6 +41,7 @@ def main():
     print("R {}".format(Rversion))
 
     instDir = sys.argv[1]
+    startDir = os.getcwd()
 
     os.mkdir(instDir)
     curDir = os.getcwd()
@@ -50,13 +51,19 @@ def main():
     os.mkdir(tmpLibDir)
     
     Rexe = buildsrcdist.getRCommand();
+
+    os.chdir(startDir)
     tmpSrcDir, srcPackName = buildsrcdist.createSourcePackage(Rexe)
+    os.chdir(instDir)
+
+    print tmpSrcDir, srcPackName
 
     logFileName = "rlogfile"
 
     try:
         with open(logFileName, "wt") as logfile:
-            subprocess.call([ Rexe, "CMD", "INSTALL", os.path.join(tmpSrcDir, srcPackName), "--build", "-l", tmpLibDir ], stdout=logfile, stderr=logfile)
+            subprocess.call([ Rexe, "CMD", "INSTALL", os.path.join(tmpSrcDir, srcPackName), "--build", "-l", tmpLibDir ], 
+                            stdout=logfile, stderr=logfile)
     finally:
         shutil.rmtree(tmpSrcDir)
 

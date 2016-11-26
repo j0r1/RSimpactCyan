@@ -27,12 +27,18 @@ def createSourcePackage(Rcmd = "R"):
     tmpDir = tempfile.mkdtemp()
     print "Created dir", tmpDir
 
-    subprocess.check_call(["hg", "archive", tmpDir])
-
     curDir = os.getcwd()
+    print "Current dir", curDir
+
+    tarBall = subprocess.check_output([ "git", "archive", "--format", "tar", "--prefix=archive/", "HEAD"])
+
     try:
         os.chdir(tmpDir)
-        subprocess.check_call([ Rcmd, "CMD", "build", "pkg"])
+        with open("archive.tar", "wb") as f:
+            f.write(tarBall)
+
+        subprocess.check_call([ "tar", "xf", "archive.tar" ])
+        subprocess.check_call([ Rcmd, "CMD", "build", "archive/pkg"])
         sourcePackage = [ n for n in os.listdir(".") if n.endswith(".tar.gz")][0]
     finally:
         os.chdir(curDir)
