@@ -3,6 +3,7 @@
 import subprocess
 import platform
 import tempfile
+import tarfile
 import shutil
 import sys
 import os
@@ -37,8 +38,12 @@ def createSourcePackage(Rcmd = "R"):
         with open("archive.tar", "wb") as f:
             f.write(tarBall)
 
-        subprocess.check_call([ "tar", "xf", "archive.tar" ])
-        subprocess.check_call([ Rcmd, "CMD", "build", "archive/pkg"])
+        tar = tarfile.open("archive.tar", "r")
+        tar.extractall()
+        tar.close()
+
+        #subprocess.check_call([ "tar", "xf", "archive.tar" ])
+        subprocess.check_call([ Rcmd, "CMD", "build", os.path.join("archive","pkg")])
         sourcePackage = [ n for n in os.listdir(".") if n.endswith(".tar.gz")][0]
     finally:
         os.chdir(curDir)
