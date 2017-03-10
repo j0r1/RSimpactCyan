@@ -1,5 +1,7 @@
-RSimpactCyan installation instructions
-======================================
+Installation and troubleshooting instructions
+=============================================
+
+Troubleshooting instructions are at the end of the page.
 
 OS X
 ----
