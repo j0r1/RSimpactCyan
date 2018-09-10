@@ -37,13 +37,15 @@ MS-Windows
  3. If you don't have Python 2.7 installed yet, [download and install it](https://www.python.org/downloads/).
     Make sure to install it in the `c:\python27` location.
 
- 4. In a new R session, run
+ 4. Make sure you have the [Rtools](https://cran.r-project.org/bin/windows/Rtools/) installed.
+
+ 5. In a new R session, run
 
         source("https://raw.githubusercontent.com/j0r1/RSimpactCyanBootstrap/master/initsimpact.R")
 
     to install the needed R packages.
 
- 5. From then on, running `library("RSimpactCyan")` in an R session should work.
+ 6. From then on, running `library("RSimpactCyan")` in an R session should work.
 
 Ubuntu/Debian or Redhat Linux
 -----------------------------
